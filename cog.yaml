@@ -1,0 +1,24 @@
+# Configuration for Cog ⚙️
+# Reference: https://github.com/replicate/cog/blob/main/docs/yaml.md
+build:
+  gpu: true
+  cuda: "11.8"
+  python_version: "3.10"
+  system_packages:
+    - "libgl1-mesa-glx"
+    - "libsm6"
+    - "libxext6"
+    - "wget"
+  python_packages:
+    - "accelerate==0.24.0"
+    - "diffusers==0.23.0"
+    - "einops"
+    - "invisible-watermark==0.2.0"
+    - "insightface==0.7.3"
+    - "onnxruntime-gpu"
+    - "torch==2.0.1"
+    - "torchvision==0.15.2"
+    - "transformers==4.35.0"
+    - "git+https://github.com/tencent-ailab/IP-Adapter.git"
+
+predict: "predict.py:Predictor"
