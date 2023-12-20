@@ -12,6 +12,7 @@ from ip_adapter.ip_adapter_faceid import IPAdapterFaceID
 from diffusers import StableDiffusionPipeline, DDIMScheduler, AutoencoderKL
 
 base_model_path = "SG161222/Realistic_Vision_V4.0_noVAE"
+base_cache = "model-cache"
 vae_model_path = "stabilityai/sd-vae-ft-mse"
 ip_cache = "./ip-cache"
 device = "cuda"
@@ -21,9 +22,9 @@ class Predictor(BasePredictor):
     def setup(self) -> None:
         """Load the model into memory to make running multiple predictions efficient"""
         # Get ip-adapter-faceid model
-        if not os.path.exists(ip_cache):
+        if not os.path.exists("ip-cache/ip-adapter-faceid_sd15.bin"):
             os.makedirs(ip_cache)
-            os.system(f"wget https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid_sd15.bin")
+            os.system(f"wget -O ip-cache/ip-adapter-faceid_sd15.bin https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid_sd15.bin")
         # Face embedding
         self.app = FaceAnalysis(name="buffalo_l", providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
         # SD
@@ -45,7 +46,8 @@ class Predictor(BasePredictor):
             scheduler=noise_scheduler,
             vae=vae,
             feature_extractor=None,
-            safety_checker=None
+            safety_checker=None,
+            cache_dir=base_cache,
         )
         self.pipe = pipe.to(device)
         # IP adapter
@@ -65,7 +67,7 @@ class Predictor(BasePredictor):
         ),
         negative_prompt: str = Input(
             description="Input Negative Prompt",
-            default="monochrome, lowres, bad anatomy, worst quality, low quality, blurry",
+            default="monochrome, lowres, bad anatomy, worst quality, low quality, blurry, multiple people",
         ),
         width: int = Input(
             description="Width of output image",
