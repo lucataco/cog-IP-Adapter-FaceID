@@ -16,3 +16,8 @@ Run a prediction
 
 ![red-dress](output.0.png)
 
+## License
+
+The code in this repository is licensed under the [Apache License 2.0](LICENSE).
+
+The model weights are not covered by this license. [IP-Adapter-FaceID](https://huggingface.co/h94/IP-Adapter-FaceID) is released for non-commercial research use only, because the InsightFace face models it depends on are non-commercial.
